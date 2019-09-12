@@ -15,11 +15,12 @@ beforeEach(() => {
 });
 
 let seededUsers = null;
+let seededTags = null;
 
 beforeEach(async() => {
-  const { users } = await seedData();
+  const { users, tags } = await seedData();
   seededUsers = prepare(users);
-  return seededUsers;
+  seededTags = prepare(tags);
 });
 
 afterAll(() => {
@@ -28,4 +29,5 @@ afterAll(() => {
 
 module.exports = {
   getUsers: () => seededUsers,
+  getTags: () => seededTags
 };

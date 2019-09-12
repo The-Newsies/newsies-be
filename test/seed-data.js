@@ -1,7 +1,9 @@
 const User = require('../lib/models/User');
+const Tag = require('../lib/models/Tag');
+
 const chance = require('chance').Chance();
 
-module.exports = async({ users = 5 } = {}) => {
+module.exports = async({ users = 5, tags = 5 } = {}) => {
   const createdUsers = await User.create(
     [...Array(users)].map(() => ({
       name: chance.name(),
@@ -10,7 +12,15 @@ module.exports = async({ users = 5 } = {}) => {
     }))
   );
 
+  const createdTags = await Tag.create(
+    [...Array(tags)].map(() => ({
+      name: chance.name(),
+      hexCode: chance.string()
+    }))
+  );
+
   return {
-    users: createdUsers
+    users: createdUsers,
+    tags: createdTags
   };
 };
