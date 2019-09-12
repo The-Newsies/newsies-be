@@ -1,9 +1,10 @@
 const User = require('../lib/models/User');
 const Tag = require('../lib/models/Tag');
+const Article = require('../lib/models/Article');
 
 const chance = require('chance').Chance();
 
-module.exports = async({ users = 5, tags = 5 } = {}) => {
+module.exports = async({ users = 5, tags = 5, articles = 10 } = {}) => {
   const createdUsers = await User.create(
     [...Array(users)].map(() => ({
       name: chance.name(),
@@ -19,8 +20,22 @@ module.exports = async({ users = 5, tags = 5 } = {}) => {
     }))
   );
 
+  const createdArticles = await Article.create(
+    [...Array(articles)].map(() => ({
+      source: { id: chance.name(), name: chance.name() },
+      author: chance.name(),
+      title: chance.string(),
+      description: chance.string(),
+      url: chance.url(),
+      urlToImage: chance.url({ extensions: ['jpg'] }),
+      publishedAt: chance.string(),
+      content: chance.string()
+    }))
+  );
+
   return {
     users: createdUsers,
-    tags: createdTags
+    tags: createdTags,
+    articles: createdArticles
   };
 };

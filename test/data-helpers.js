@@ -3,6 +3,7 @@ require('dotenv').config();
 const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
 const seedData = require('./seed-data');
+mongoose.set('useUnifiedTopology', true);
 
 const prepare = arr => JSON.parse(JSON.stringify(arr));
 
@@ -16,11 +17,13 @@ beforeEach(() => {
 
 let seededUsers = null;
 let seededTags = null;
+let seededArticles = null;
 
 beforeEach(async() => {
-  const { users, tags } = await seedData();
+  const { users, tags, articles } = await seedData();
   seededUsers = prepare(users);
   seededTags = prepare(tags);
+  seededArticles = prepare(articles);
 });
 
 afterAll(() => {
@@ -28,6 +31,8 @@ afterAll(() => {
 });
 
 module.exports = {
+  prepare,
   getUsers: () => seededUsers,
-  getTags: () => seededTags
+  getTags: () => seededTags,
+  getArticles: () => seededArticles,
 };
