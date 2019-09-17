@@ -20,14 +20,16 @@ let seededTags = null;
 let seededArticles = null;
 let seededTrendingHistories = null;
 let seededCollections = null;
+let seededLoggedInUser = null;
 
 beforeEach(async() => {
-  const { users, tags, articles, trendingHistories, collections } = await seedData();
+  const { users, tags, articles, trendingHistories, collections, loggedInUser } = await seedData();
   seededUsers = prepare(users);
   seededTags = prepare(tags);
   seededArticles = prepare(articles);
   seededTrendingHistories = prepare(trendingHistories);
   seededCollections = prepare(collections);
+  seededLoggedInUser = prepare(loggedInUser);
 });
 
 afterAll(() => {
@@ -40,5 +42,6 @@ module.exports = {
   getTags: () => seededTags,
   getArticles: () => seededArticles,
   getTrendingHistories: () => seededTrendingHistories,
-  getCollections: () => seededCollections
+  getCollections: () => seededCollections,
+  getLoggedInUser: () => seededLoggedInUser
 };

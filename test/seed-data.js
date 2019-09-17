@@ -51,7 +51,22 @@ module.exports = async({ users = 5, tags = 5, articles = 10, histories = 5, coll
     });
   }));
 
-  const createdCollections = await Collection.create(
+  const createdLoggedInUser = await User.create({ 
+    name: 'User',
+    avatar: 'urlhere', 
+    authid: 'fake-user|12345' 
+  });
+
+  const createdCollectionsByLoggedInUser = await Collection.create(
+    [...Array(collections)].map(() => ({
+      name: chance.name(),
+      articleIds: chance.pickset(articleIds, 3),
+      user: createdLoggedInUser._id,
+      description: chance.sentence()
+    }))
+  );
+
+  const createdCollectionsByOther = await Collection.create(
     [...Array(collections)].map(() => ({
       name: chance.name(),
       articleIds: chance.pickset(articleIds, 3),
@@ -60,11 +75,14 @@ module.exports = async({ users = 5, tags = 5, articles = 10, histories = 5, coll
     }))
   );
 
+  const createdCollections = createdCollectionsByLoggedInUser.concat(createdCollectionsByOther);
+  
   return {
     users: createdUsers,
     tags: createdTags,
     articles: createdArticles,
     trendingHistories: createdTrendingHistories,
-    collections: createdCollections
+    collections: createdCollections,
+    loggedInUser: createdLoggedInUser,
   };
 };

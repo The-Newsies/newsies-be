@@ -1,5 +1,4 @@
-const { getArticles, prepare } = require('../test/data-helpers');
-const User = require('../lib/models/User');
+const { getArticles, getCollections, getLoggedInUser } = require('../test/data-helpers');
 
 const request = require('supertest');
 const app = require('../lib/app');
@@ -8,13 +7,7 @@ jest.mock('../lib/middleware/ensure-auth.js');
 
 describe('collection routes', () => {
   it('creates a collection', async() => {
-    const user = prepare(await User.create({ 
-      name: 'User',
-      avatar: 'urlhere', 
-      authid: 'fake-user|12345' 
-    }));
-
-    console.log(user._id);
+    const user = await getLoggedInUser();
     const articles = await getArticles();
 
     return request(app)
@@ -34,4 +27,22 @@ describe('collection routes', () => {
         });
       });
   });
+
+  it('gets all collections by logged in user', async() => {
+    const user = await getLoggedInUser();
+    const collections = await getCollections();
+    const expectedCollections = collections.filter(collection => {
+      return collection.user === user._id;
+    });
+
+    return request(app)
+      .get('/api/v1/collections')
+      .then(res => {
+        expect(res.body).toHaveLength(5);
+        expectedCollections.forEach(collection => {
+          expect(res.body).toContainEqual(collection);
+        });
+      });
+  });
+
 });
