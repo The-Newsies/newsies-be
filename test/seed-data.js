@@ -2,10 +2,11 @@ const User = require('../lib/models/User');
 const Tag = require('../lib/models/Tag');
 const Article = require('../lib/models/Article');
 const History = require('../lib/models/History');
+const Collection = require('../lib/models/Collection');
 
 const chance = require('chance').Chance();
 
-module.exports = async({ users = 5, tags = 5, articles = 10, histories = 5 } = {}) => {
+module.exports = async({ users = 5, tags = 5, articles = 10, histories = 5, collections = 5 } = {}) => {
   const createdUsers = await User.create(
     [...Array(users)].map(() => ({
       name: chance.name(),
@@ -50,11 +51,20 @@ module.exports = async({ users = 5, tags = 5, articles = 10, histories = 5 } = {
     });
   }));
 
+  const createdCollections = await Collection.create(
+    [...Array(collections)].map(() => ({
+      name: chance.name(),
+      articleIds: chance.pickset(articleIds, 3),
+      user: createdUsers[0]._id,
+      description: chance.sentence()
+    }))
+  );
 
   return {
     users: createdUsers,
     tags: createdTags,
     articles: createdArticles,
-    trendingHistories: createdTrendingHistories
+    trendingHistories: createdTrendingHistories,
+    collections: createdCollections
   };
 };
