@@ -60,7 +60,7 @@ module.exports = async({ users = 5, tags = 5, articles = 10, histories = 5, coll
   const createdCollectionsByLoggedInUser = await Collection.create(
     [...Array(collections)].map(() => ({
       name: chance.name(),
-      articleIds: chance.pickset(articleIds, 3),
+      articleIds: [createdArticles[0]._id],
       user: createdLoggedInUser._id,
       description: chance.sentence()
     }))

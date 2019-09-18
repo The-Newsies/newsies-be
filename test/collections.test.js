@@ -55,4 +55,17 @@ describe('collection routes', () => {
       });
   });
 
+  it('adds an article to a collection', async() => {
+    const article = await getArticles()[1];
+    const collection = await getCollections()[0];
+    const updatedArticleIds = collection.articleIds.slice();
+    updatedArticleIds.push(article._id);
+
+    return request(app)
+      .patch(`/api/v1/collections/${collection._id}/add-article/`)
+      .send({ articleId: article._id })
+      .then(res => {
+        expect(res.body).toEqual({ ...collection, articleIds: updatedArticleIds });
+      });
+  });
 });
