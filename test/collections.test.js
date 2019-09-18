@@ -83,4 +83,13 @@ describe('collection routes', () => {
         expect(res.body).toEqual({ ...collection, articleIds: updatedArticleIds });
       });
   });
+
+  it('deletes a collection', async() => {
+    const collection = await getCollections()[0];
+    return request(app)
+      .delete(`/api/v1/collections/${collection._id}`)
+      .then(res => {
+        expect(res.body).toEqual(collection);
+      });
+  });
 });
