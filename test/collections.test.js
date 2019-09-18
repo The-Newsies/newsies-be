@@ -92,4 +92,16 @@ describe('collection routes', () => {
         expect(res.body).toEqual(collection);
       });
   });
+
+  it('updates name and description of collection', async() => {
+    const collection = await getCollections()[0];
+    return request(app)
+      .patch(`/api/v1/collections/${collection._id}`)
+      .send({ name: 'New Name', description: 'New Description' })
+      .then(res => {
+        expect(res.body).toEqual({
+          ...collection, name: 'New Name', description: 'New Description'
+        });
+      });
+  });
 });
