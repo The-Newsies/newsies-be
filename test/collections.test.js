@@ -68,4 +68,19 @@ describe('collection routes', () => {
         expect(res.body).toEqual({ ...collection, articleIds: updatedArticleIds });
       });
   });
+
+  it('deletes an article from a collection', async() => {
+    const collection = await getCollections()[0];
+    const articleToDelete = collection.articleIds[0];
+    const updatedArticleIds = collection.articleIds.filter(articleId => {
+      return articleToDelete !== articleId;
+    });
+
+    return request(app)
+      .patch(`/api/v1/collections/${collection._id}/delete-article/`)
+      .send({ articleId: articleToDelete })
+      .then(res => {
+        expect(res.body).toEqual({ ...collection, articleIds: updatedArticleIds });
+      });
+  });
 });
