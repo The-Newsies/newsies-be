@@ -1,4 +1,4 @@
-const { prepare, getTrendingHistories } = require('./data-helpers');
+const { prepare, getTrendingHistories, getCollections } = require('./data-helpers');
 const Article = require('../lib/models/Article');
 
 const request = require('supertest');
@@ -60,6 +60,16 @@ describe('article routes', () => {
 
     return request(app)
       .get(`/api/v1/articles/by-history/${history._id}`)
+      .then(res => {
+        expect(res.body).toEqual(expect.any(Array));
+      });
+  });
+
+  it('can get articles from collection', async() => {
+    const collection = await getCollections()[0];
+
+    return request(app)
+      .get(`/api/v1/articles/by-collection/${collection._id}`)
       .then(res => {
         expect(res.body).toEqual(expect.any(Array));
       });
