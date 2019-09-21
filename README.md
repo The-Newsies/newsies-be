@@ -5,8 +5,9 @@ This is the back-end repo for Newzie, an app that allows you to consume and orga
 ## The Tech
 
 Back-end
-* MongoDb/Mongoose
+* MongoDB/Mongoose
 * Node
 * Express
+* Jest
 * Hosted on Heroku
 
